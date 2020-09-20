@@ -4,12 +4,62 @@
 #include "token.h"
 #include <string.h>
 
+void processFloatInt(token* tok, char* input){
+	//HANDLE >1 period
+	int periodRead = 0;
+	char* c = input + tok->startIndex;
+	//reading until you encounter '.' and digits that follow it
+	while(isdigit(*c) || *c == '.'){
+		if(periodRead && *c == '.'){
+			break;
+		} else if(*c == '.'){
+			++periodRead;
+		}
+		++tok->endIndex;
+		++c;
+	}
+	//if you run into exponent e-10 for example
+	// if(*c == 'e' && *(c+1) == '-'){
+	// 	++tok->endIndex;
+	// 	++c;
+	// 	//reading exponent digits
+	// 	while(isdigit(*c)){
+	// 		++tok->endIndex;
+	// 		++c;
+	// 	}
+	// }
+}
+
+int isHexChar(char c){
+	if(isdigit(c) || c == 'a' || c == 'A' || c == 'b' || c == 'B' || c == 'c' || c == 'C' || c == 'd' || c == 'D' || c == 'e' || c == 'E' || c == 'f' || c == 'F'){
+		return 1;
+	}
+	return 0;
+}
+
+void processHexadecimalInt(token* tok, char* input){
+	char* c = input + tok->startIndex + 2;
+	tok->endIndex += 2;
+	//assuming the first 2 chars are '0x'
+	while(isHexChar(*c)){
+		++tok->endIndex;
+		++c;
+	}
+}
 
 void processDecimalInt(token* tok, char* input){
+	
+
 	char* c = input + tok->startIndex;
 	while(isdigit(*c)){
 		++tok->endIndex;
 		++c;
+	}
+	//convert to float if appropriate, (. and digit that follows)
+	if(*c == '.' && isdigit(*(c+1))){
+		tok->endIndex = tok->startIndex;
+		tok->type = floatInt;
+		processFloatInt(tok, input);
 	}
 }
 
@@ -38,17 +88,18 @@ void processWord(token* tok, char* input){
 
 void processInitialChar(token* tok, char* input) {
 	char c = input[tok->startIndex];
+	char next = input[tok->startIndex + 1];
 	if(isalpha(c)){
 		tok->type = word;
 		return;
-	} else if(c == '0' && input[1] != 'x' && input[1] != 'X'){
-		tok->type = octalInt;
+	} else if(c == '0' && (next == 'x' || next == 'X')){
+		tok->type = hexadecimalInt;
 		return;
 	} else if(isdigit(c) && c != '0'){
 		tok->type = decimalInt;
 		return;
-	} else if(c == '0' && (input[1] == 'x' || input[1] == 'X')){
-		tok->type = hexadecimalInt;
+	} else if(c == '0' && next != 'x' && next != 'X'){
+		tok->type = octalInt;
 		return;
 	} else{
 		tok->type = op;
@@ -68,7 +119,7 @@ char* getTypeString(token* tok){
 			return "octal integer";
 			break;
 		case hexadecimalInt:
-			return "hex integer";
+			return "hex";
 			break;
 		case floatInt:
 			return "float";
@@ -86,12 +137,22 @@ void processToken(token* curToken, char* input, int startIndex){
 	//PROCESS FIRST CHARACTER, ASSUME TYPE
 	processInitialChar(curToken, input);
 	//CONTUNUE READING, CHANGE TYPE IF NEEDED, UNTIL YOU RUN INTO A CHARACTER THAT IS INCOMPATABLE WITH curToken->type
-	if(curToken->type == word){
-		processWord(curToken, input);
-	} else if(curToken->type == decimalInt){
-		processDecimalInt(curToken, input);
-	} else if(curToken->type == octalInt){
-		processOctalInt(curToken, input);
+	switch(curToken->type){
+		case word:
+			processWord(curToken, input);
+			break;
+		case decimalInt:
+			processDecimalInt(curToken, input);
+			break;
+		case octalInt:
+			processOctalInt(curToken, input);
+			break;
+		case hexadecimalInt:
+			processHexadecimalInt(curToken, input);
+			break;
+		case op:
+			break;
+
 	}
 	
 }
@@ -101,6 +162,7 @@ void printTokens(char* input){
 	token* curToken = (token*)malloc(sizeof(token));
 	if(curToken == NULL){
 		printf("Memory allocation error");
+		return;
 	}
 	while(input[i] != '\0'){
 		//skips whitespace
@@ -126,7 +188,7 @@ void printTokens(char* input){
 	free(curToken);
 }
 int main(int argc, char* argv[]){
-	printTokens("Hello World 1 0 08");
+	printTokens("3.14159 Hello World 132 0712 0xF9");
 	// if (argc == 2){
 	// 	printTokens(argv[1]);
 	// } else {
