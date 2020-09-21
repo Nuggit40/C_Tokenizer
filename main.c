@@ -19,15 +19,21 @@ void processFloatInt(token* tok, char* input){
 		++c;
 	}
 	//if you run into exponent e-10 for example
-	// if(*c == 'e' && *(c+1) == '-'){
-	// 	++tok->endIndex;
-	// 	++c;
-	// 	//reading exponent digits
-	// 	while(isdigit(*c)){
-	// 		++tok->endIndex;
-	// 		++c;
-	// 	}
-	// }
+	char next = *(c+1);
+	if(*c == 'e' && (next == '-' || next == '+' || isdigit(next))){
+		++tok->endIndex;
+		++c;
+		//read + or - if they are there
+		if(*c == '-' || *c == '+'){
+			++tok->endIndex;
+			++c;
+		}
+		//reading exponent digits
+		while(isdigit(*c)){
+			++tok->endIndex;
+			++c;
+		}
+	}
 }
 
 int isHexChar(char c){
@@ -188,7 +194,7 @@ void printTokens(char* input){
 	free(curToken);
 }
 int main(int argc, char* argv[]){
-	printTokens("3.14159 Hello World 132 0712 0xF9");
+	printTokens("1.0e-12Hello World132 07120xF9");
 	// if (argc == 2){
 	// 	printTokens(argv[1]);
 	// } else {
