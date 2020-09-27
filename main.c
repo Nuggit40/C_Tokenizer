@@ -6,12 +6,167 @@
 
 void processOperator(token* tok, char* input){
 	char* c = input + tok->startIndex;
-	while(ispunct(*c) ){
-		++tok->endIndex;
-		++c;
+	char next = input[tok->startIndex + 1];
+	char next2 = input[tok->startIndex + 2];
+	if (*c == '+'){
+	if (next == '+'){
+		tok->opType = increment;
+	}
+	else if (next == '=')
+		tok->opType = plus_equals;
+	
+	else 
+		tok->opType = addition;
+	}
+	else if(*c == '<'){
+		if (next == '<'){
+			if (next2 == '='){
+				tok->opType = shift_left_equals;
+			}		
+			else{
+				tok->opType = shift_left;
+			}
+		}
+		else if(next == '='){
+			tok->opType = less_than_or_equal_test;
+		}
+		else {
+			tok->opType = less_than_test;
+		}
+
+	}
+	else if(*c == '>'){
+		if (next == '>'){
+			if (next2 == '='){
+				tok->opType = shift_right_equals;
+			}
+			else{
+				tok->opType = shift_right;
+			}
+		}
+		else if (next == '='){
+			tok->opType = greater_than_or_equal_test;
+		}
+		else{
+			tok->opType = greater_than_test;
+		}
+
+	}
+	else if(*c == '-'){
+		if (next== '-'){
+			tok->opType = decrement;	
+		}
+		else if(next == '='){
+			tok->opType = minus_equals;
+		}
+		else if(next == '>'){
+			tok->opType = structure_pointer;
+		}
+		else{
+			tok->opType = minus_subtract_operator;
+		}
+	}
+	else if(*c == '('){
+		tok->opType = left_parenthesis;
+	}
+	else if (*c == ')'){
+		tok->opType = right_parenthesis;
+	}
+	else if (*c == '['){
+		tok->opType = left_bracket;
+	}
+	else if (*c == ']'){
+		tok->opType = right_bracket;
+	}
+	else if(*c == '.'){
+		tok->opType = structure_member;
+
+	}
+	// else if (*c == 'sizeOf' || *c == 'sizeof'){
+	// 	tok->opType = sizeOf;
+	// }
+	else if(*c == ','){
+		tok->opType = comma;
+	}
+	else if(*c == '!'){
+		if(next == '='){
+			tok->opType = inequality_test;
+		}
+		else{
+			tok->opType = negate;
+		}
+	}
+	else if(*c == '~'){
+		tok->opType = ones_complement;
+	}
+	else if(*c == '^'){
+		if(next == '='){
+			tok->opType = bitwise_XOR_equals;
+		}
+		else{
+			tok->opType = bitwise_XOR;
+		}
+	}
+	else if(*c == '|'){
+		if(next == '|'){
+			tok->opType = logical_OR;
+		}
+		else if(next == '='){
+			tok->opType = bitwise_OR_equals;
+		}
+		else{
+			tok->opType = bitwise_OR;
+		}
+	}
+	else if(*c == '/'){
+		if(next == '='){
+			tok->opType = divide_equals;
+		}
+		else{
+			tok->opType = division;
+		}
+	}
+	else if(*c == '&'){
+		if(next == '&'){
+			tok->opType = logical_AND;
+		}
+		else if(next == '='){
+			tok->opType = bitwise_AND_equals;
+		}
+		else{
+			tok->opType = AND_address_operator;
+		}
+	}
+	else if(*c == '?'){
+		tok->opType = conditional_true;
+	}
+	else if(*c == ':'){
+		tok->opType = conditional_false;
+	}
+	else if(*c == '='){
+		if(next == '='){
+			tok->opType = equality_test;
+		}
+		else{
+			tok->opType = assignment;
+		}
+	}
+	else if(*c == '*'){
+		if(next == '='){
+			tok->opType = times_equals;
+		}
+		else{
+			tok->opType = multiply_dereference_operator;
+		}
+	}
+	else if(*c == '%'){
+		tok->opType = mod_equals;
 	}
 
 }
+
+
+
 
 void processFloatInt(token* tok, char* input){
 	//HANDLE >1 period
