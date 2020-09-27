@@ -4,6 +4,10 @@
 #include "token.h"
 #include <string.h>
 
+void processOperator(token* tok, char* input){
+
+}
+
 void processFloatInt(token* tok, char* input){
 	//HANDLE >1 period
 	int periodRead = 0;
@@ -20,7 +24,7 @@ void processFloatInt(token* tok, char* input){
 	}
 	//if you run into exponent e-10 for example
 	char next = *(c+1);
-	if(*c == 'e' && (next == '-' || next == '+' || isdigit(next))){
+	if((*c == 'e' || *c == 'E') && (next == '-' || next == '+' || isdigit(next))){
 		++tok->endIndex;
 		++c;
 		//read + or - if they are there
@@ -54,8 +58,6 @@ void processHexadecimalInt(token* tok, char* input){
 }
 
 void processDecimalInt(token* tok, char* input){
-	
-
 	char* c = input + tok->startIndex;
 	while(isdigit(*c)){
 		++tok->endIndex;
@@ -82,10 +84,23 @@ void processOctalInt(token* tok, char* input){
 		++tok->endIndex;
 		++c;
 	}
+	//switching type to float
+	if(*c == '.'){
+		tok->endIndex = tok->startIndex;
+		tok->type = floatInt;
+		processFloatInt(tok, input);
+	}
 }
 
 void processWord(token* tok, char* input){
 	char* c = input + tok->startIndex;
+	//edge case where the word is sizeof
+	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f'){
+		tok->endIndex += 6;
+		tok->type = op;
+		tok->opType = sizeOf;
+		return;
+	}
 	while(isalnum(*c)){
 		++tok->endIndex;
 		++c;
@@ -113,6 +128,14 @@ void processInitialChar(token* tok, char* input) {
 	}
 }
 
+char* getOperatorString(token* tok){
+	switch(tok->opType){
+		case sizeOf:
+			return "sizeof";
+			break;
+	}
+}
+
 char* getTypeString(token* tok){
 	switch(tok->type){
 		case word:
@@ -125,18 +148,17 @@ char* getTypeString(token* tok){
 			return "octal integer";
 			break;
 		case hexadecimalInt:
-			return "hex";
+			return "hexadecimal integer";
 			break;
 		case floatInt:
-			return "float";
+			return "floating point";
 			break;
 		case op:
-			return "";
+			return getOperatorString(tok);
 			break;
 		default: "";
 	}
 }
-
 void processToken(token* curToken, char* input, int startIndex){
 	curToken->startIndex = startIndex;
 	curToken->endIndex = startIndex;
@@ -157,8 +179,8 @@ void processToken(token* curToken, char* input, int startIndex){
 			processHexadecimalInt(curToken, input);
 			break;
 		case op:
+			processOperator(curToken, input);
 			break;
-
 	}
 	
 }
@@ -186,7 +208,7 @@ void printTokens(char* input){
 		memcpy(str, &input[curToken->startIndex], tokenLength);
 		str[tokenLength] = '\0';
 		char* type_str = getTypeString(curToken);
-		printf("%s \"%s\"\n", type_str, str);
+		printf("%s: \"%s\"\n", type_str, str);
 		free(str);
 		//printf("curtoken endindex: %d\n", curToken->endIndex);
 		i = curToken->endIndex;
@@ -194,10 +216,10 @@ void printTokens(char* input){
 	free(curToken);
 }
 int main(int argc, char* argv[]){
-	printTokens("1.0e-12Hello World132 07120xF9");
-	// if (argc == 2){
-	// 	printTokens(argv[1]);
-	// } else {
-	// 	printf("Invalid argument count\n");
-	// }
+	// printTokens("1.0e-12Hello World132 07120xF9");
+	if (argc == 2){
+		printTokens(argv[1]);
+	} else {
+		printf("Invalid argument count\n");
+	}
 }
