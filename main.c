@@ -5,6 +5,11 @@
 #include <string.h>
 
 void processOperator(token* tok, char* input){
+	char* c = input + tok->startIndex;
+	while(ispunct(*c) ){
+		++tok->endIndex;
+		++c;
+	}
 
 }
 
@@ -130,8 +135,130 @@ void processInitialChar(token* tok, char* input) {
 
 char* getOperatorString(token* tok){
 	switch(tok->opType){
+		case left_parenthesis:
+			return "left parenthesis";
+			break;
+		case right_parenthesis:
+			return "right parenthesis";
+			break;
+		case left_bracket:
+			return "left bracket";
+			break;
+		case right_bracket:
+			return "right bracket";
+			break;
+		case structure_member:
+			return "structure member";
+			break;
+		case structure_pointer:
+			return "structure_pointer";
+			break;
 		case sizeOf:
 			return "sizeof";
+			break;
+		case comma:
+			return "comma";
+		case negate:
+			return "negate";
+			break;
+		case ones_complement:
+			return "ones complement";
+			break;
+		case shift_right:
+			return "shift right";
+			break;
+		case shift_left:
+			return "shift left";
+			break;
+		case bitwise_XOR:
+			return "bitwise XOR";
+			break;
+		case bitwise_OR:
+			return "bitwise OR";
+			break;
+		case increment:
+			return "increment";
+			break;
+		case decrement:
+			return "decrement";
+			break;
+		case addition:
+			return "addition";
+			break;
+		case division:
+			return "division";
+			break;
+		case logical_OR:
+			return "logical OR";
+			break;
+		case logical_AND:
+			return "logical AND";
+			break;
+		case conditional_true:
+			return "conditional true";
+			break;
+		case conditional_false:
+			return "conditional false";
+			break;
+		case equality_test:
+			return "equality test";
+			break;
+		case inequality_test:
+			return "inequality test";
+			break;
+		case less_than_test:
+			return "less than test";
+			break;
+		case greater_than_test:
+			return "greater than test";
+			break;
+		case less_than_or_equal_test:
+			return "less than or equal test";
+			break;
+		case greater_than_or_equal_test:
+			return "greater than or equal test";
+			break;
+		case assignment:
+			return "assignment";
+			break;
+		case plus_equals:
+			return "plus equals";
+			break;
+		case minus_equals:
+			return "minus equals";
+			break;
+		case times_equals:
+			return "times equals";
+			break;
+		case divide_equals:
+			return "divide equals";
+			break;
+		case mod_equals:
+			return "mod equals";
+			break;
+		case shift_right_equals:
+			return "shift right equals";
+			break;
+		case shift_left_equals:
+			return "shift left equals";
+			break;
+		case bitwise_AND_equals:
+			return "bitwise AND equals";
+			break;
+		case bitwise_XOR_equals:
+			return "bitwise XOR equals";
+			break;
+		case bitwise_OR_equals:
+			return "bitwise OR equals";
+			break;
+		case AND_address_operator:
+			return "AND address operator";
+			break;
+		case minus_subtract_operator:
+			return "minus subtract operator";
+			break;
+		case multiply_dereference_operator:
+			return "multiply dereference operator";
 			break;
 	}
 }
