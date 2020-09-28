@@ -178,11 +178,14 @@ void processOperator(token* tok, char* input){
 			tok->opType = multiply_dereference_operator;
 		}
 	}
-	else if(*c == '%' && next == '='){
-		tok->opType = mod_equals;
-		++tok->endIndex;
+	else if(*c == '%'){
+		if(next == '='){
+			tok->opType = mod_equals;
+			++tok->endIndex;
+		} else {
+			tok->opType = modulus;
+		}
 	}
-
 }
 
 void processFloatInt(token* tok, char* input){
@@ -361,6 +364,9 @@ char* getOperatorString(token* tok){
 		case division:
 			return "division";
 			break;
+		case modulus:
+			return "modulus";
+			break;
 		case logical_OR:
 			return "logical OR";
 			break;
@@ -433,6 +439,8 @@ char* getOperatorString(token* tok){
 		case multiply_dereference_operator:
 			return "multiply dereference operator";
 			break;
+		default:
+			return "unknown character";
 	}
 }
 

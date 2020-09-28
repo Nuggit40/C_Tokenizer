@@ -22,6 +22,7 @@ typedef enum _operatorType{
 	decrement,
 	addition,
 	division,
+	modulus,
 	logical_OR,
 	logical_AND,
 	conditional_true,
