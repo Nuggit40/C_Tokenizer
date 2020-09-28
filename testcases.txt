@@ -82,7 +82,7 @@ bitwise XOR: "^"
 bitwise OR: "|"
 increment: "++"
 decrement: "--"
-addition: "+" ?????????????????
+addition: "+"
 division: "/"
 logical OR "||"
 logical AND: "&&"
