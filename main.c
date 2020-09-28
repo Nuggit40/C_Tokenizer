@@ -10,6 +10,10 @@ void processOperator(token* tok, char* input){
 	char next2 = input[tok->startIndex + 2];
 	//assuming token is at least 1 length
 	++tok->endIndex;
+	//checking for unsupported characters
+	if(*c == '\\' || *c == '\"' || *c == '`'){
+		tok->opType = unknown;
+	};
 	if (*c == '+'){
 		if (next == '+'){
 			tok->opType = increment;
@@ -439,8 +443,11 @@ char* getOperatorString(token* tok){
 		case multiply_dereference_operator:
 			return "multiply dereference operator";
 			break;
-		default:
+		case unknown:
 			return "unknown character";
+			break;
+		default:
+			return "";
 	}
 }
 
@@ -467,6 +474,7 @@ char* getTypeString(token* tok){
 		default: "";
 	}
 }
+
 void processToken(token* curToken, char* input, int startIndex){
 	curToken->startIndex = startIndex;
 	curToken->endIndex = startIndex;

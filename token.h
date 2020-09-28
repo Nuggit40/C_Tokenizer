@@ -46,7 +46,8 @@ typedef enum _operatorType{
 	bitwise_OR_equals,
 	AND_address_operator,
 	minus_subtract_operator,
-	multiply_dereference_operator
+	multiply_dereference_operator,
+	unknown
 } operatorType;
 typedef struct _token{
 	int startIndex;
