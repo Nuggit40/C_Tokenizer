@@ -8,26 +8,33 @@ void processOperator(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	char next = input[tok->startIndex + 1];
 	char next2 = input[tok->startIndex + 2];
+	//assuming token is at least 1 length
+	++tok->endIndex;
 	if (*c == '+'){
-	if (next == '+'){
-		tok->opType = increment;
-	}
-	else if (next == '=')
-		tok->opType = plus_equals;
-	
-	else 
-		tok->opType = addition;
-	}
+		if (next == '+'){
+			tok->opType = increment;
+			++tok->endIndex;
+		}
+		else if (next == '='){
+			tok->opType = plus_equals;
+			++tok->endIndex;
+		}
+		else 
+			tok->opType = addition;
+		}
 	else if(*c == '<'){
 		if (next == '<'){
+			++tok->endIndex;
 			if (next2 == '='){
 				tok->opType = shift_left_equals;
+				++tok->endIndex;
 			}		
-			else{
+			else {
 				tok->opType = shift_left;
 			}
 		}
 		else if(next == '='){
+			++tok->endIndex;
 			tok->opType = less_than_or_equal_test;
 		}
 		else {
@@ -37,8 +44,10 @@ void processOperator(token* tok, char* input){
 	}
 	else if(*c == '>'){
 		if (next == '>'){
+			++tok->endIndex;
 			if (next2 == '='){
 				tok->opType = shift_right_equals;
+				++tok->endIndex;
 			}
 			else{
 				tok->opType = shift_right;
@@ -46,6 +55,7 @@ void processOperator(token* tok, char* input){
 		}
 		else if (next == '='){
 			tok->opType = greater_than_or_equal_test;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = greater_than_test;
@@ -54,13 +64,16 @@ void processOperator(token* tok, char* input){
 	}
 	else if(*c == '-'){
 		if (next== '-'){
-			tok->opType = decrement;	
+			tok->opType = decrement;
+			++tok->endIndex;	
 		}
 		else if(next == '='){
 			tok->opType = minus_equals;
+			++tok->endIndex;
 		}
 		else if(next == '>'){
 			tok->opType = structure_pointer;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = minus_subtract_operator;
@@ -82,15 +95,13 @@ void processOperator(token* tok, char* input){
 		tok->opType = structure_member;
 
 	}
-	// else if (*c == 'sizeOf' || *c == 'sizeof'){
-	// 	tok->opType = sizeOf;
-	// }
 	else if(*c == ','){
 		tok->opType = comma;
 	}
 	else if(*c == '!'){
 		if(next == '='){
 			tok->opType = inequality_test;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = negate;
@@ -102,6 +113,7 @@ void processOperator(token* tok, char* input){
 	else if(*c == '^'){
 		if(next == '='){
 			tok->opType = bitwise_XOR_equals;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = bitwise_XOR;
@@ -110,9 +122,11 @@ void processOperator(token* tok, char* input){
 	else if(*c == '|'){
 		if(next == '|'){
 			tok->opType = logical_OR;
+			++tok->endIndex;
 		}
 		else if(next == '='){
 			tok->opType = bitwise_OR_equals;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = bitwise_OR;
@@ -121,6 +135,7 @@ void processOperator(token* tok, char* input){
 	else if(*c == '/'){
 		if(next == '='){
 			tok->opType = divide_equals;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = division;
@@ -129,9 +144,11 @@ void processOperator(token* tok, char* input){
 	else if(*c == '&'){
 		if(next == '&'){
 			tok->opType = logical_AND;
+			++tok->endIndex;
 		}
 		else if(next == '='){
 			tok->opType = bitwise_AND_equals;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = AND_address_operator;
@@ -146,6 +163,7 @@ void processOperator(token* tok, char* input){
 	else if(*c == '='){
 		if(next == '='){
 			tok->opType = equality_test;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = assignment;
@@ -154,19 +172,18 @@ void processOperator(token* tok, char* input){
 	else if(*c == '*'){
 		if(next == '='){
 			tok->opType = times_equals;
+			++tok->endIndex;
 		}
 		else{
 			tok->opType = multiply_dereference_operator;
 		}
 	}
-	else if(*c == '%'){
+	else if(*c == '%' && next == '='){
 		tok->opType = mod_equals;
+		++tok->endIndex;
 	}
 
 }
-
-
-
 
 void processFloatInt(token* tok, char* input){
 	//HANDLE >1 period
@@ -313,6 +330,7 @@ char* getOperatorString(token* tok){
 			break;
 		case comma:
 			return "comma";
+			break;
 		case negate:
 			return "negate";
 			break;
@@ -483,8 +501,6 @@ void printTokens(char* input){
 		//main token processing
 		processToken(curToken, input, i);
 		int tokenLength = curToken->endIndex - curToken->startIndex;
-
-		//printf("tokenlength: %d\n", tokenLength);
 		//copy contents of the token in the input and prints
 		char* str = (char*)malloc(sizeof(char)*tokenLength + 1);
 		memcpy(str, &input[curToken->startIndex], tokenLength);
@@ -492,13 +508,11 @@ void printTokens(char* input){
 		char* type_str = getTypeString(curToken);
 		printf("%s: \"%s\"\n", type_str, str);
 		free(str);
-		//printf("curtoken endindex: %d\n", curToken->endIndex);
 		i = curToken->endIndex;
 	}
 	free(curToken);
 }
 int main(int argc, char* argv[]){
-	// printTokens("1.0e-12Hello World132 07120xF9");
 	if (argc == 2){
 		printTokens(argv[1]);
 	} else {
