@@ -188,7 +188,7 @@ void processOperator(token* tok, char* input){
 	}
 }
 
-void processFloatInt(token* tok, char* input){
+void processFloat(token* tok, char* input){
 	//HANDLE >1 period
 	int periodRead = 0;
 	char* c = input + tok->startIndex;
@@ -247,7 +247,7 @@ void processDecimalInt(token* tok, char* input){
 	if(*c == '.' && isdigit(*(c+1))){
 		tok->endIndex = tok->startIndex;
 		tok->type = floatInt;
-		processFloatInt(tok, input);
+		processFloat(tok, input);
 	}
 }
 
@@ -268,7 +268,7 @@ void processOctalInt(token* tok, char* input){
 	if(*c == '.'){
 		tok->endIndex = tok->startIndex;
 		tok->type = floatInt;
-		processFloatInt(tok, input);
+		processFloat(tok, input);
 	}
 }
 
