@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include "token.h"
 #include <string.h>
-
+//Finds the type and size of an operator and checks for unsupported operators
 void processOperator(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	char next = input[tok->startIndex + 1];
@@ -192,12 +192,12 @@ void processOperator(token* tok, char* input){
 		}
 	}
 }
-
+//Finds out how many characters a float token is
 void processFloat(token* tok, char* input){
-	//HANDLE >1 period
 	int periodRead = 0;
 	char* c = input + tok->startIndex;
 	//reading until you encounter '.' and digits that follow it
+	//only one period is allowed, breaks if another is encountered
 	while(isdigit(*c) || *c == '.'){
 		if(periodRead && *c == '.'){
 			break;
@@ -207,7 +207,7 @@ void processFloat(token* tok, char* input){
 		++tok->endIndex;
 		++c;
 	}
-	//if you run into exponent e-10 for example
+	//if you run into an exponent
 	char next = *(c+1);
 	if((*c == 'e' || *c == 'E') && (next == '-' || next == '+' || isdigit(next))){
 		++tok->endIndex;
@@ -224,14 +224,14 @@ void processFloat(token* tok, char* input){
 		}
 	}
 }
-
+//Determines if a character is allowed to be inside of a hexadecimal number after "0x"
 int isHexChar(char c){
 	if(isdigit(c) || c == 'a' || c == 'A' || c == 'b' || c == 'B' || c == 'c' || c == 'C' || c == 'd' || c == 'D' || c == 'e' || c == 'E' || c == 'f' || c == 'F'){
 		return 1;
 	}
 	return 0;
 }
-
+//Finds out how many characters a hexadecimal token is
 void processHexadecimalInt(token* tok, char* input){
 	char* c = input + tok->startIndex + 2;
 	tok->endIndex += 2;
@@ -241,7 +241,8 @@ void processHexadecimalInt(token* tok, char* input){
 		++c;
 	}
 }
-
+//Finds out how many characters a decimal token is
+//Switches type to float if necessary
 void processDecimalInt(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	while(isdigit(*c)){
@@ -255,12 +256,14 @@ void processDecimalInt(token* tok, char* input){
 		processFloat(tok, input);
 	}
 }
-
+//Finds out how many characters an octal token is
+//Switches type to float if necessary
 void processOctalInt(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	while(isdigit(*c)){
+		//switching type to decimal if character is not allowed in an octal but is
+		//allowed to be a decimal
 		if(*c == '8' || *c == '9'){
-			//switching type to decimal
 			tok->endIndex = tok->startIndex;
 			tok->type = decimalInt;
 			processDecimalInt(tok, input);
@@ -269,29 +272,31 @@ void processOctalInt(token* tok, char* input){
 		++tok->endIndex;
 		++c;
 	}
-	//switching type to float
+	//switching type to float if the terminating character is a '.'
 	if(*c == '.'){
 		tok->endIndex = tok->startIndex;
 		tok->type = floatInt;
 		processFloat(tok, input);
 	}
 }
-
+//Finds out how many characters a word token is 
 void processWord(token* tok, char* input){
 	char* c = input + tok->startIndex;
-	//edge case where the word is sizeof
+	//edge case where the word is sizeof, change type
 	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f'){
 		tok->endIndex += 6;
 		tok->type = op;
 		tok->opType = sizeOf;
 		return;
 	}
+	//keep reading characters and incrementing the tokens ending index
+	//until a character is not allowed to be in a word type
 	while(isalnum(*c)){
 		++tok->endIndex;
 		++c;
 	}
 }
-
+//Assumes what the initial type should be of the current token and sets it
 void processInitialChar(token* tok, char* input) {
 	char c = input[tok->startIndex];
 	char next = input[tok->startIndex + 1];
@@ -312,7 +317,7 @@ void processInitialChar(token* tok, char* input) {
 		return;
 	}
 }
-
+//Gets a string representation of the operator type
 char* getOperatorString(token* tok){
 	switch(tok->opType){
 		case left_parenthesis:
@@ -451,7 +456,7 @@ char* getOperatorString(token* tok){
 			return "";
 	}
 }
-
+//Gets a string representation of the token type
 char* getTypeString(token* tok){
 	switch(tok->type){
 		case word:
@@ -475,13 +480,14 @@ char* getTypeString(token* tok){
 		default: "";
 	}
 }
-
+//Finds out what the type of token is and where the token starts/ends
 void processToken(token* curToken, char* input, int startIndex){
+	//initial endIndex of the token starts at the startIndex of the token
 	curToken->startIndex = startIndex;
 	curToken->endIndex = startIndex;
-	//PROCESS FIRST CHARACTER, ASSUME TYPE
+	//assumes the type that the token should start being read as
 	processInitialChar(curToken, input);
-	//CONTUNUE READING, CHANGE TYPE IF NEEDED, UNTIL YOU RUN INTO A CHARACTER THAT IS INCOMPATABLE WITH curToken->type
+	//based on the assumed type, how should we continue to read the token
 	switch(curToken->type){
 		case word:
 			processWord(curToken, input);
@@ -501,12 +507,13 @@ void processToken(token* curToken, char* input, int startIndex){
 	}
 	
 }
-
+//Prints the tokens of the input string
+//if malloc fails then "Memory allocation error" is printed and the function returns
 void printTokens(char* input){
 	int i = 0;
 	token* curToken = (token*)malloc(sizeof(token));
 	if(curToken == NULL){
-		printf("Memory allocation error");
+		printf("Memory allocation error\n");
 		return;
 	}
 	while(input[i] != '\0'){
@@ -515,20 +522,26 @@ void printTokens(char* input){
 			++i;
 			continue;
 		}
-		//main token processing
+		//Fill in info about the current token
 		processToken(curToken, input, i);
+		//Create the string that will be printed
 		int tokenLength = curToken->endIndex - curToken->startIndex;
-		//copy contents of the token in the input and prints
 		char* str = (char*)malloc(sizeof(char)*tokenLength + 1);
+		if(str == NULL){
+			printf("Memory allocation error\n");
+			return;
+		}
 		memcpy(str, &input[curToken->startIndex], tokenLength);
 		str[tokenLength] = '\0';
 		char* type_str = getTypeString(curToken);
+		//Print out the current token
 		printf("%s: \"%s\"\n", type_str, str);
 		free(str);
 		i = curToken->endIndex;
 	}
 	free(curToken);
 }
+//Main function that prints tokens for each command line argument provided
 int main(int argc, char* argv[]){
 	int i;
 	for(i = 1; i < argc; ++i){
