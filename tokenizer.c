@@ -530,9 +530,8 @@ void printTokens(char* input){
 	free(curToken);
 }
 int main(int argc, char* argv[]){
-	if (argc == 2){
-		printTokens(argv[1]);
-	} else {
-		printf("Invalid argument count\n");
+	int i;
+	for(i = 1; i < argc; ++i){
+		printTokens(argv[i]);
 	}
 }

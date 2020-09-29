@@ -1,69 +1,3 @@
-input: “array[xyz ] += pi 3.14159e-10”
-output:
-word: "array"
-left bracket: "["
-word: "xyz"
-right bracket: "]"
-plus equals: "+="
-word: "pi"
-float: "3.141519e-10"
-
-input: "numbers 972 0x972 A8 0XA8 XA8 0972 072"
-output:
-word: "numbers"
-decimal integer: "972"
-hexadecimal integer: "0x972"
-word: "A8"
-hexadecimal integer: "0XA8"
-word: "XA8"
-decimal integer: "0972"
-octal integer: "072"
-
-input: "3.1 03.1 x3.1 0x3.1 30x1.x"
-output:
-floating point: "3.1"
-floating point: "03.1"
-word: "x3"
-structure member: "."
-decimal integer: "1"
-hexadecimal integer: "0x3"
-structure member: "."
-decimal integer: "1"
-decimal integer: "30"
-word: "x1"
-structure member: "x"
-word: "x"
-
-input: "+,++,+++,++++,+++++,++=,+++=="
-output:
-addition: "+"
-comma: ","
-increment: "++"
-comma: ","
-increment: "++"
-addition: "+"
-comma: ","
-increment: "++"
-increment: "++"
-comma: ","
-increment: "++"
-increment: "++"
-addition: "+"
-comma: ","
-increment: "++"
-assignment: "="
-comma: ","
-increment: "++"
-plus equals: "+="
-assignment: "="
-
-input: "0x4356abdc 0777 [] "
-output:
-hexadecimal integer: "0x4356abdc"
-octal integer: "0777"
-left bracket: "["
-right bracket: "]"
-
 input: "()[].->sizeof,!~>><<^|++--+/||&&?:==!=<><=>==+=-=*=/=%=>>=<<=&=^=|=&-*"
 output:
 left parenthesis: "("
@@ -107,3 +41,15 @@ bitwise XOR equals: "|="
 AND/address operator: "&"
 minus/subtract operator: "-"
 multiply/dereference operator: "*"
+
+input: ""
+output:
+
+input: "123.5E+12abc123 0x5 0x 0 1"
+output:
+floating point: "123.5E+12"
+word: "abc123"
+hexadecimal integer: "0x5"
+hexadecimal integer: "0x"
+octal integer: "0"
+decimal integer: "1"
