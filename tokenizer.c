@@ -386,7 +386,7 @@ void processWord(token* tok, char* input){
 		}
 		else if(isspace (c[11]) && c[12] == 'l' && c[13] == 'o' && c[14] == 'n' && c[15] == 'g'){
 		tok->endIndex +=5;
-		if(isspace (c[16]) && c[17] == '1' && c[18] == 'n' && c[19] == 't'){
+		if(isspace (c[16]) && c[17] == 'i' && c[18] == 'n' && c[19] == 't'){
 			tok->endIndex +=4;
 			tok->type = op;
 			tok->opType = singed_long_long_int;	
