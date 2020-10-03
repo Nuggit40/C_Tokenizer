@@ -49,6 +49,13 @@ typedef enum _operatorType{
 	AND_address_operator,
 	minus_subtract_operator,
 	multiply_dereference_operator,
+	_char,
+	signed_char,
+	signed_short_int,
+	signed_short,
+	singed_long_int,
+	singed_long_long_int,
+	singed_long_long,
 	unknown
 } operatorType;
 typedef struct _token{
@@ -343,6 +350,55 @@ void processWord(token* tok, char* input){
 		tok->opType = sizeOf;
 		return;
 	}
+	else if(c[0] == 'c' && c[1] == 'h' && c[2] == 'a' && c[3] == 'r'){
+		tok->endIndex +=4;
+		tok->type = op;
+		tok->opType = _char;
+	}
+	else if(c[0] == 's' && c[1] == 'i' && c[2] == 'g' && c[3] == 'n' && c[4] == 'e' && c[5] == 'd'){
+		tok->endIndex += 6;	
+		if(isspace (c[6]) && c[7] == 'c' && c[8] == 'h' && c[9] == 'a' && c[10] == 'r'){
+			tok->endIndex +=5;
+			tok->type = op;
+			tok->opType = signed_char;
+	}
+	else if(isspace (c[6]) && c[7] == 's' && c[8] == 'h' && c[9] == 'o' && c[10] == 'r'&& c[11] == 't' ){
+		tok->endIndex +=6;
+			if(isspace (c[12]) && c[13] == '1' && c[14] == 'n' && c[15] == 't'){
+				tok->endIndex +=4;
+				tok->type = op;
+				tok->opType = signed_short_int;	
+
+		}
+		else{
+			tok->type = op;
+			tok->opType = signed_short;	
+		}
+	}
+	else if(isspace (c[6]) && c[7] == 'l' && c[8] == 'o' && c[9] == 'n' && c[10] == 'g'){
+		tok->endIndex +=5;
+		if(isspace (c[11]) && c[12] == '1' && c[13] == 'n' && c[14] == 't'){
+			tok->endIndex +=4;
+			tok->type = op;
+			tok->opType = singed_long_int;	
+
+		}
+		else if(isspace (c[11]) && c[12] == 'l' && c[13] == 'o' && c[14] == 'n' && c[15] == 'g'){
+		tok->endIndex +=5;
+		if(isspace (c[16]) && c[17] == '1' && c[18] == 'n' && c[19] == 't'){
+			tok->endIndex +=4;
+			tok->type = op;
+			tok->opType = singed_long_long_int;	
+
+		}
+		else{
+			tok->type = op;
+			tok->opType = singed_long_long;	
+		}
+	}				
+	
+	
+	
 	//keep reading characters and incrementing the tokens ending index
 	//until a character is not allowed to be in a word type
 	while(isalnum(*c)){
@@ -390,7 +446,7 @@ char* getOperatorString(token* tok){
 			return "structure member";
 			break;
 		case structure_pointer:
-			return "structure_pointer";
+			return "structure pointer";
 			break;
 		case sizeOf:
 			return "sizeof";
@@ -502,6 +558,27 @@ char* getOperatorString(token* tok){
 			break;
 		case multiply_dereference_operator:
 			return "multiply/dereference operator";
+			break;
+		case _char:
+			return "char";
+			break;
+		case signed_char:
+			return "singed char";
+			break;
+		case signed_short_int:
+			return "signed short int";
+			break;
+		case signed_short:
+			return "signed short";
+			break;
+		case singed_long_int:
+			return "signed long int";
+			break;
+		case singed_long_long_int:
+			return "signed long long int";
+			break;
+		case singed_long_long:
+			return "signed long long";
 			break;
 		case unknown:
 			return "unknown character";

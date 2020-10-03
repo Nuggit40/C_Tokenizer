@@ -1,6 +1,6 @@
 # C_Tokenizer
 ## Program Information
-The program accepts user input strings of characters, numberes, punctuation, and some functions and returns tokens and token types. 
+The program accepts user input strings of characters, numbers, punctuation, and some functions and returns tokens and token types. 
 ## Token types
 - *Alphabetic Characters and Word Strings*
 - *Decimal and Int Numbers*
