@@ -362,6 +362,7 @@ void processWord(token* tok, char* input){
 			tok->type = op;
 			tok->opType = signed_char;
 	}
+	}
 	else if(isspace (c[6]) && c[7] == 's' && c[8] == 'h' && c[9] == 'o' && c[10] == 'r'&& c[11] == 't' ){
 		tok->endIndex +=6;
 			if(isspace (c[12]) && c[13] == '1' && c[14] == 'n' && c[15] == 't'){
@@ -397,7 +398,7 @@ void processWord(token* tok, char* input){
 		}
 	}				
 	
-	
+	}
 	
 	//keep reading characters and incrementing the tokens ending index
 	//until a character is not allowed to be in a word type
