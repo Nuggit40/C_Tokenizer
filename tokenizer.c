@@ -568,7 +568,7 @@ void printTokens(char* input){
 	token* curToken = (token*)malloc(sizeof(token));
 	if(curToken == NULL){
 		printf("Memory allocation error\n");
-		return;
+		exit(EXIT_FAILURE);
 	}
 	while(input[i] != '\0'){
 		//skips whitespace
@@ -583,6 +583,7 @@ void printTokens(char* input){
 		char* str = (char*)malloc(sizeof(char)*tokenLength + 1);
 		if(str == NULL){
 			printf("Memory allocation error\n");
+			exit(EXIT_FAILURE);
 			return;
 		}
 		memcpy(str, &input[curToken->startIndex], tokenLength);
