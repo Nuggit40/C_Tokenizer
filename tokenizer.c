@@ -371,40 +371,37 @@ void processOctalInt(token* tok, char* input){
 //checks if the word being processes is a keyword and processes the keyword if applicable
 int processKeyword(token* tok, char* input){
 	char* c = input + tok->startIndex;
-	if(c[0] == 'a' && c[1] == 'u' && c[2] == 't' && c[3] == 'o'){
+	if(c[0] == 'a' && c[1] == 'u' && c[2] == 't' && c[3] == 'o' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _auto;
 		return 1;
 	}
-	else if(c[0] == 'b' && c[1] == 'r' && c[2] == 'e' && c[3] == 'a' && c[4] == 'k'){
+	else if(c[0] == 'b' && c[1] == 'r' && c[2] == 'e' && c[3] == 'a' && c[4] == 'k' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _break;
 		return 1;
 	}
-	else if(c[0] == 'c' && c[1] == 'a' && c[2] == 's' && c[3] == 'e'){
+	else if(c[0] == 'c' && c[1] == 'a' && c[2] == 's' && c[3] == 'e' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _case;
 		return 1;
 	}
-	
-	
-	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 't' && c[4] == 'i' && c[5] == 'n' && c[6] == 'u' && c[7] == 'e'){
+	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 't' && c[4] == 'i' && c[5] == 'n' && c[6] == 'u' && c[7] == 'e' && !isalnum(c[8])){
 		tok->endIndex += 8;
 		tok->type = kw;
 		tok->kwType = _continue;
 		return 1;
 	}
-	else if(c[0] == 'd' && c[1] == 'e' && c[2] == 'f' && c[3] == 'a' && c[4] == 'u' && c[5] == 'l' && c[6] == 't'){
+	else if(c[0] == 'd' && c[1] == 'e' && c[2] == 'f' && c[3] == 'a' && c[4] == 'u' && c[5] == 'l' && c[6] == 't' && !isalnum(c[7])){
 		tok->endIndex += 7;
 		tok->type = kw;
 		tok->kwType = _default;
 		return 1;
 	}
-	
-	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 's' && c[4] == 't'){
+	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 's' && c[4] == 't' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _const;
@@ -412,152 +409,152 @@ int processKeyword(token* tok, char* input){
 	}
 	else if(c[0] == 'd' && c[1] == 'o'){
 		
-	 	if(c[0] == 'd' && c[1] == 'o' && c[2] == 'u' && c[3] == 'b' && c[4] == 'l' && c[5] == 'e'){
+	 	if(c[0] == 'd' && c[1] == 'o' && c[2] == 'u' && c[3] == 'b' && c[4] == 'l' && c[5] == 'e' && !isalnum(c[6])){
 			tok->endIndex += 6;
 			tok->type = kw;
 			tok->kwType = _double;
 			return 1;
 	}
-		else{
+		else if(!isalnum(c[2])){
 		tok->endIndex += 2;
 		tok->type = kw;
 		tok->kwType = _do;
 		return 1;
 		}
 	}
-	else if(c[0] == 'e' && c[1] == 'l' && c[2] == 's' && c[3] == 'e'){
+	else if(c[0] == 'e' && c[1] == 'l' && c[2] == 's' && c[3] == 'e' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _else;
 		return 1;
 	}
-	else if(c[0] == 'e' && c[1] == 'n' && c[2] == 'u' && c[3] == 'm'){
+	else if(c[0] == 'e' && c[1] == 'n' && c[2] == 'u' && c[3] == 'm' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _enum;
 		return 1;
 	}
-	else if(c[0] == 'e' && c[1] == 'x' && c[2] == 't' && c[3] == 'e' && c[4] == 'r' && c[5] == 'n'){
+	else if(c[0] == 'e' && c[1] == 'x' && c[2] == 't' && c[3] == 'e' && c[4] == 'r' && c[5] == 'n' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _extern;
 		return 1;
 	}
-	else if(c[0] == 'f' && c[1] == 'o' && c[2] == 'r'){
+	else if(c[0] == 'f' && c[1] == 'o' && c[2] == 'r' && !isalnum(c[3])){
 		tok->endIndex += 3;
 		tok->type = kw;
 		tok->kwType = _for;
 		return 1;
 	}
-	else if(c[0] == 'i' && c[1] == 'f'){
+	else if(c[0] == 'i' && c[1] == 'f' && !isalnum(c[2])){
 		tok->endIndex += 2;
 		tok->type = kw;
 		tok->kwType = _if;
 		return 1;
 	}
-	else if(c[0] == 'g' && c[1] == 'o' && c[2] == 't' && c[3] == 'o'){
+	else if(c[0] == 'g' && c[1] == 'o' && c[2] == 't' && c[3] == 'o' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _goto;
 		return 1;
 	}
-	else if(c[0] == 'f' && c[1] == 'l' && c[2] == 'o' && c[3] == 'a' && c[4] == 't'){
+	else if(c[0] == 'f' && c[1] == 'l' && c[2] == 'o' && c[3] == 'a' && c[4] == 't' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _float;
 		return 1;
 	}
-	else if(c[0] == 'i' && c[1] == 'n' && c[2] == 't'){
+	else if(c[0] == 'i' && c[1] == 'n' && c[2] == 't' && !isalnum(c[3])){
 		tok->endIndex += 3;
 		tok->type = kw;
 		tok->kwType = _int;
 		return 1;
 	}
-	else if(c[0] == 'c' && c[1] == 'h' && c[2] == 'a' && c[3] == 'r'){
+	else if(c[0] == 'c' && c[1] == 'h' && c[2] == 'a' && c[3] == 'r' && !isalnum(c[4])){
 		tok->endIndex +=4;
 		tok->type = kw;
 		tok->kwType = _char;
 		return 1;
 	}
-	else if(c[0] == 's' && c[1] == 'i' && c[2] == 'g' && c[3] == 'n' && c[4] == 'e' && c[5] == 'd'){
+	else if(c[0] == 's' && c[1] == 'i' && c[2] == 'g' && c[3] == 'n' && c[4] == 'e' && c[5] == 'd' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _signed;
 		return 1;	
 	}
-	else if(c[0] == 's' && c[1] == 'h' && c[2] == 'o' && c[3] == 'r'&& c[4] == 't' ){
+	else if(c[0] == 's' && c[1] == 'h' && c[2] == 'o' && c[3] == 'r'&& c[4] == 't' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _short;
 		return 1;
 	}
-	else if(c[0] == 'l' && c[1] == 'o' && c[2] == 'n' && c[3] == 'g'){
+	else if(c[0] == 'l' && c[1] == 'o' && c[2] == 'n' && c[3] == 'g' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _long;
 		return 1;
 	}
-	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 's' && c[3] == 'i' && c[4] == 'g' && c[5] == 'n' && c[6] == 'e' && c[7] == 'd'){
+	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 's' && c[3] == 'i' && c[4] == 'g' && c[5] == 'n' && c[6] == 'e' && c[7] == 'd' && !isalnum(c[8])){
 		tok->endIndex += 8;
 		tok->type = kw;
 		tok->kwType = _unsigned;
 		return 1;
 	}
-	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'l' && c[3] == 'a' && c[4] == 't' && c[5] == 'i' && c[6] == 'l' && c[7] == 'e'){
+	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'l' && c[3] == 'a' && c[4] == 't' && c[5] == 'i' && c[6] == 'l' && c[7] == 'e' && !isalnum(c[8])){
 		tok->endIndex += 8;
 		tok->type = kw;
 		tok->kwType = _volatile;
 		return 1;
 	}
-	else if(c[0] == 'w' && c[1] == 'h' && c[2] == 'i' && c[3] == 'l' && c[4] == 'e'){
+	else if(c[0] == 'w' && c[1] == 'h' && c[2] == 'i' && c[3] == 'l' && c[4] == 'e' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _while;
 		return 1;
 	}
-	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'i' && c[3] == 'd'){
+	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'i' && c[3] == 'd' && !isalnum(c[4])){
 		tok->endIndex += 4;
 		tok->type = kw;
 		tok->kwType = _void;
 		return 1;
 	}
-	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 'i' && c[3] == 'o' && c[4] == 'n'){
+	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 'i' && c[3] == 'o' && c[4] == 'n' && !isalnum(c[5])){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _union;
 		return 1;
 	}
-	else if(c[0] == 't' && c[1] == 'y' && c[2] == 'p' && c[3] == 'e' && c[4] == 'd' && c[5] == 'e' && c[6] == 'f'){
+	else if(c[0] == 't' && c[1] == 'y' && c[2] == 'p' && c[3] == 'e' && c[4] == 'd' && c[5] == 'e' && c[6] == 'f' && !isalnum(c[7])){
 		tok->endIndex += 7;
 		tok->type = kw;
 		tok->kwType = _typedef;
 		return 1;
 	}
-	else if(c[0] == 's' && c[1] == 'w' && c[2] == 'i' && c[3] == 't' && c[4] == 'c' && c[5] == 'h'){
+	else if(c[0] == 's' && c[1] == 'w' && c[2] == 'i' && c[3] == 't' && c[4] == 'c' && c[5] == 'h' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _switch;
 		return 1;
 	}
-	else if(c[0] == 's' && c[1] == 't' && c[2] == 'r' && c[3] == 'u' && c[4] == 'c' && c[5] == 't'){
+	else if(c[0] == 's' && c[1] == 't' && c[2] == 'r' && c[3] == 'u' && c[4] == 'c' && c[5] == 't' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _struct;
 		return 1;
 	}
-	else if(c[0] == 's' && c[1] == 't' && c[2] == 'a' && c[3] == 't' && c[4] == 'i' && c[5] == 'c'){
+	else if(c[0] == 's' && c[1] == 't' && c[2] == 'a' && c[3] == 't' && c[4] == 'i' && c[5] == 'c' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _static;
 		return 1;
 	}
-	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 't' && c[3] == 'u' && c[4] == 'r' && c[5] == 'n'){
+	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 't' && c[3] == 'u' && c[4] == 'r' && c[5] == 'n' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = kw;
 		tok->kwType = _return;
 		return 1;
 	}
-	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 'g' && c[3] == 'i' && c[4] == 's' && c[5] == 't' && c[6] == 'e' && c[7] == 'r'){
+	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 'g' && c[3] == 'i' && c[4] == 's' && c[5] == 't' && c[6] == 'e' && c[7] == 'r' && !isalnum(c[8])){
 		tok->endIndex += 8;
 		tok->type = kw;
 		tok->kwType = _register;
@@ -569,7 +566,7 @@ int processKeyword(token* tok, char* input){
 void processWord(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	//edge case where the word is sizeof, change type
-	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f'){
+	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = op;
 		tok->opType = sizeOf;
