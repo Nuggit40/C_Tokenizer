@@ -389,12 +389,8 @@ int processKeyword(token* tok, char* input){
 		tok->kwType = _case;
 		return 1;
 	}
-	else if(c[0] == 'd' && c[1] == 'o'){
-		tok->endIndex += 2;
-		tok->type = kw;
-		tok->kwType = _do;
-		return 1;
-	}
+	
+	
 	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 't' && c[4] == 'i' && c[5] == 'n' && c[6] == 'u' && c[7] == 'e'){
 		tok->endIndex += 8;
 		tok->type = kw;
@@ -407,17 +403,27 @@ int processKeyword(token* tok, char* input){
 		tok->kwType = _default;
 		return 1;
 	}
+	
 	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 's' && c[4] == 't'){
 		tok->endIndex += 5;
 		tok->type = kw;
 		tok->kwType = _const;
 		return 1;
 	}
-	else if(c[0] == 'd' && c[1] == 'o' && c[2] == 'u' && c[3] == 'b' && c[4] == 'l' && c[5] == 'e'){
-		tok->endIndex += 6;
+	else if(c[0] == 'd' && c[1] == 'o'){
+		
+	 	if(c[0] == 'd' && c[1] == 'o' && c[2] == 'u' && c[3] == 'b' && c[4] == 'l' && c[5] == 'e'){
+			tok->endIndex += 6;
+			tok->type = kw;
+			tok->kwType = _double;
+			return 1;
+	}
+		else{
+		tok->endIndex += 2;
 		tok->type = kw;
-		tok->kwType = _double;
+		tok->kwType = _do;
 		return 1;
+		}
 	}
 	else if(c[0] == 'e' && c[1] == 'l' && c[2] == 's' && c[3] == 'e'){
 		tok->endIndex += 4;
@@ -583,94 +589,94 @@ void processWord(token* tok, char* input){
 char* getKeywordString(token* tok){
 	switch(tok->kwType){
 		case _auto:
-			return "auto";
+			return "Keyword - auto";
 			break;
 		case _break:
-			return "break";
+			return "Keyword - break";
 			break;
 		case _case:
-			return "case";
+			return "Keyword - case";
 			break;
 		case _char:
-			return "char";
+			return "Keyword - char";
 			break;
 		case _continue:
-			return "continue";
+			return "Keyword - continue";
 			break;
 		case _do:
-			return "do";
+			return "Keyword - do";
 			break;
 		case _default:
-			return "default";
+			return "Keyword - default";
 			break;
 		case _const:
-			return "const";
+			return "Keyword - const";
 			break;
 		case _double:
-			return "double";
+			return "Keyword - double";
 			break;
 		case _else:
-			return "else";
+			return "Keyword - else";
 			break;
 		case _enum:
-			return "enum";
+			return "Keyword - enum";
 			break;
 		case _extern:
-			return "extern";
+			return "Keyword - extern";
 			break;
 		case _for:
-			return "for";
+			return "Keyword - for";
 			break;
 		case _if:
-			return "if";
+			return "Keyword - if";
 			break;
 		case _goto:
-			return "goto";
+			return "Keyword - goto";
 			break;
 		case _float:
-			return "float";
+			return "Keyword - float";
 			break;
 		case _int:
-			return "int";
+			return "Keyword - int";
 			break;
 		case _long:
-			return "long";
+			return "Keyword - long";
 			break;
 		case _register:
-			return "register";
+			return "Keyword - register";
 			break;
 		case _signed:
-			return "signed";
+			return "Keyword - signed";
 			break;
 		case _static:
-			return "static";
+			return "Keyword - static";
 			break;
 		case _short:
-			return "short";
+			return "Keyword - short";
 			break;
 		case _struct:
-			return "struct";
+			return "Keyword - struct";
 			break;
 		case _switch:
-			return "switch";
+			return "Keyword - switch";
 			break;
 		case _typedef:
-			return "typedef";
+			return "Keyword - typedef";
 			break;
 		case _union:
-			return "union";
+			return "Keyword - union";
 			break;
 		case _void:
-			return "void";
+			return "Keyword - void";
 			break;
 		case _while:
-			return "while";
+			return "Keyword - while";
 			break;
 		case _volatile:
-			return "volatile";
+			return "Keyword - volatile";
 			break;
 		case _unsigned:
-			return "unsigned";
+			return "Keyword - unsigned";
 			break;
 		default:
 			return "";
