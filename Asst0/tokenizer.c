@@ -3,8 +3,42 @@
 #include <ctype.h>
 #include <string.h>
 typedef enum _tokenType{
-	word, decimalInt, octalInt, hexadecimalInt, floatInt, op
+	word, decimalInt, octalInt, hexadecimalInt, floatInt, op, kw
 } tokenType;
+typedef enum _keyword{
+	_char,
+	_auto,	
+	_double,
+	_int,
+	_struct,
+	_break,
+	_else,
+	_long,
+	_switch,
+	_case,
+	_enum,
+	_register,
+	_typedef,
+	_extern,
+	_return,
+	_union,
+	_continue,
+	_for,
+	_signed,
+	_void,
+	_do,
+	_if,
+	_static,
+	_while,
+	_default,
+	_goto,
+	_volatile,
+	_const,
+	_float,
+	_short,
+	_unsigned,
+
+} keywordType;
 typedef enum _operatorType{
 	left_parenthesis,
 	right_parenthesis,
@@ -56,6 +90,7 @@ typedef struct _token{
 	int endIndex;
 	tokenType type;
 	operatorType opType;
+	keywordType kwType;
 } token;
 //Finds the type and size of an operator and checks for unsupported operators
 void processOperator(token* tok, char* input){
@@ -333,14 +368,212 @@ void processOctalInt(token* tok, char* input){
 		processFloat(tok, input);
 	}
 }
+//checks if the word being processed is a keyword and processes the keyword if applicable
+int processKeyword(token* tok, char* input){
+	char* c = input + tok->startIndex;
+	if(c[0] == 'a' && c[1] == 'u' && c[2] == 't' && c[3] == 'o' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _auto;
+		return 1;
+	}
+	else if(c[0] == 'b' && c[1] == 'r' && c[2] == 'e' && c[3] == 'a' && c[4] == 'k' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _break;
+		return 1;
+	}
+	else if(c[0] == 'c' && c[1] == 'a' && c[2] == 's' && c[3] == 'e' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _case;
+		return 1;
+	}
+	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 't' && c[4] == 'i' && c[5] == 'n' && c[6] == 'u' && c[7] == 'e' && !isalnum(c[8])){
+		tok->endIndex += 8;
+		tok->type = kw;
+		tok->kwType = _continue;
+		return 1;
+	}
+	else if(c[0] == 'd' && c[1] == 'e' && c[2] == 'f' && c[3] == 'a' && c[4] == 'u' && c[5] == 'l' && c[6] == 't' && !isalnum(c[7])){
+		tok->endIndex += 7;
+		tok->type = kw;
+		tok->kwType = _default;
+		return 1;
+	}
+	else if(c[0] == 'c' && c[1] == 'o' && c[2] == 'n' && c[3] == 's' && c[4] == 't' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _const;
+		return 1;
+	}
+	else if(c[0] == 'd' && c[1] == 'o'){
+		
+	 	if(c[0] == 'd' && c[1] == 'o' && c[2] == 'u' && c[3] == 'b' && c[4] == 'l' && c[5] == 'e' && !isalnum(c[6])){
+			tok->endIndex += 6;
+			tok->type = kw;
+			tok->kwType = _double;
+			return 1;
+	}
+		else if(!isalnum(c[2])){
+		tok->endIndex += 2;
+		tok->type = kw;
+		tok->kwType = _do;
+		return 1;
+		}
+	}
+	else if(c[0] == 'e' && c[1] == 'l' && c[2] == 's' && c[3] == 'e' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _else;
+		return 1;
+	}
+	else if(c[0] == 'e' && c[1] == 'n' && c[2] == 'u' && c[3] == 'm' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _enum;
+		return 1;
+	}
+	else if(c[0] == 'e' && c[1] == 'x' && c[2] == 't' && c[3] == 'e' && c[4] == 'r' && c[5] == 'n' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _extern;
+		return 1;
+	}
+	else if(c[0] == 'f' && c[1] == 'o' && c[2] == 'r' && !isalnum(c[3])){
+		tok->endIndex += 3;
+		tok->type = kw;
+		tok->kwType = _for;
+		return 1;
+	}
+	else if(c[0] == 'i' && c[1] == 'f' && !isalnum(c[2])){
+		tok->endIndex += 2;
+		tok->type = kw;
+		tok->kwType = _if;
+		return 1;
+	}
+	else if(c[0] == 'g' && c[1] == 'o' && c[2] == 't' && c[3] == 'o' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _goto;
+		return 1;
+	}
+	else if(c[0] == 'f' && c[1] == 'l' && c[2] == 'o' && c[3] == 'a' && c[4] == 't' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _float;
+		return 1;
+	}
+	else if(c[0] == 'i' && c[1] == 'n' && c[2] == 't' && !isalnum(c[3])){
+		tok->endIndex += 3;
+		tok->type = kw;
+		tok->kwType = _int;
+		return 1;
+	}
+	else if(c[0] == 'c' && c[1] == 'h' && c[2] == 'a' && c[3] == 'r' && !isalnum(c[4])){
+		tok->endIndex +=4;
+		tok->type = kw;
+		tok->kwType = _char;
+		return 1;
+	}
+	else if(c[0] == 's' && c[1] == 'i' && c[2] == 'g' && c[3] == 'n' && c[4] == 'e' && c[5] == 'd' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _signed;
+		return 1;	
+	}
+	else if(c[0] == 's' && c[1] == 'h' && c[2] == 'o' && c[3] == 'r'&& c[4] == 't' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _short;
+		return 1;
+	}
+	else if(c[0] == 'l' && c[1] == 'o' && c[2] == 'n' && c[3] == 'g' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _long;
+		return 1;
+	}
+	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 's' && c[3] == 'i' && c[4] == 'g' && c[5] == 'n' && c[6] == 'e' && c[7] == 'd' && !isalnum(c[8])){
+		tok->endIndex += 8;
+		tok->type = kw;
+		tok->kwType = _unsigned;
+		return 1;
+	}
+	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'l' && c[3] == 'a' && c[4] == 't' && c[5] == 'i' && c[6] == 'l' && c[7] == 'e' && !isalnum(c[8])){
+		tok->endIndex += 8;
+		tok->type = kw;
+		tok->kwType = _volatile;
+		return 1;
+	}
+	else if(c[0] == 'w' && c[1] == 'h' && c[2] == 'i' && c[3] == 'l' && c[4] == 'e' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _while;
+		return 1;
+	}
+	else if(c[0] == 'v' && c[1] == 'o' && c[2] == 'i' && c[3] == 'd' && !isalnum(c[4])){
+		tok->endIndex += 4;
+		tok->type = kw;
+		tok->kwType = _void;
+		return 1;
+	}
+	else if(c[0] == 'u' && c[1] == 'n' && c[2] == 'i' && c[3] == 'o' && c[4] == 'n' && !isalnum(c[5])){
+		tok->endIndex += 5;
+		tok->type = kw;
+		tok->kwType = _union;
+		return 1;
+	}
+	else if(c[0] == 't' && c[1] == 'y' && c[2] == 'p' && c[3] == 'e' && c[4] == 'd' && c[5] == 'e' && c[6] == 'f' && !isalnum(c[7])){
+		tok->endIndex += 7;
+		tok->type = kw;
+		tok->kwType = _typedef;
+		return 1;
+	}
+	else if(c[0] == 's' && c[1] == 'w' && c[2] == 'i' && c[3] == 't' && c[4] == 'c' && c[5] == 'h' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _switch;
+		return 1;
+	}
+	else if(c[0] == 's' && c[1] == 't' && c[2] == 'r' && c[3] == 'u' && c[4] == 'c' && c[5] == 't' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _struct;
+		return 1;
+	}
+	else if(c[0] == 's' && c[1] == 't' && c[2] == 'a' && c[3] == 't' && c[4] == 'i' && c[5] == 'c' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _static;
+		return 1;
+	}
+	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 't' && c[3] == 'u' && c[4] == 'r' && c[5] == 'n' && !isalnum(c[6])){
+		tok->endIndex += 6;
+		tok->type = kw;
+		tok->kwType = _return;
+		return 1;
+	}
+	else if(c[0] == 'r' && c[1] == 'e' && c[2] == 'g' && c[3] == 'i' && c[4] == 's' && c[5] == 't' && c[6] == 'e' && c[7] == 'r' && !isalnum(c[8])){
+		tok->endIndex += 8;
+		tok->type = kw;
+		tok->kwType = _register;
+		return 1;
+	}
+	return 0;
+}
 //Finds out how many characters a word token is 
 void processWord(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	//edge case where the word is sizeof, change type
-	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f'){
+	if(c[0] == 's' && c[1] == 'i' && c[2] == 'z' && c[3] == 'e' && c[4] == 'o' && c[5] == 'f' && !isalnum(c[6])){
 		tok->endIndex += 6;
 		tok->type = op;
 		tok->opType = sizeOf;
+		return;
+	}
+	//checking if the word happens to be a keyword and process that keyword
+	if(processKeyword(tok, input)){
 		return;
 	}
 	//keep reading characters and incrementing the tokens ending index
@@ -350,6 +583,102 @@ void processWord(token* tok, char* input){
 		++c;
 	}
 }
+char* getKeywordString(token* tok){
+	switch(tok->kwType){
+		case _auto:
+			return "Keyword - auto";
+			break;
+		case _break:
+			return "Keyword - break";
+			break;
+		case _case:
+			return "Keyword - case";
+			break;
+		case _char:
+			return "Keyword - char";
+			break;
+		case _continue:
+			return "Keyword - continue";
+			break;
+		case _do:
+			return "Keyword - do";
+			break;
+		case _default:
+			return "Keyword - default";
+			break;
+		case _const:
+			return "Keyword - const";
+			break;
+		case _double:
+			return "Keyword - double";
+			break;
+		case _else:
+			return "Keyword - else";
+			break;
+		case _enum:
+			return "Keyword - enum";
+			break;
+		case _extern:
+			return "Keyword - extern";
+			break;
+		case _for:
+			return "Keyword - for";
+			break;
+		case _if:
+			return "Keyword - if";
+			break;
+		case _goto:
+			return "Keyword - goto";
+			break;
+		case _float:
+			return "Keyword - float";
+			break;
+		case _int:
+			return "Keyword - int";
+			break;
+		case _long:
+			return "Keyword - long";
+			break;
+		case _register:
+			return "Keyword - register";
+			break;
+		case _signed:
+			return "Keyword - signed";
+			break;
+		case _static:
+			return "Keyword - static";
+			break;
+		case _short:
+			return "Keyword - short";
+			break;
+		case _struct:
+			return "Keyword - struct";
+			break;
+		case _switch:
+			return "Keyword - switch";
+			break;
+		case _typedef:
+			return "Keyword - typedef";
+			break;
+		case _union:
+			return "Keyword - union";
+			break;
+		case _void:
+			return "Keyword - void";
+			break;
+		case _while:
+			return "Keyword - while";
+			break;
+		case _volatile:
+			return "Keyword - volatile";
+			break;
+		case _unsigned:
+			return "Keyword - unsigned";
+			break;
+		default:
+			return "";
+	}
+	}				
 //Assumes what the initial type should be of the current token and sets it
 void processInitialChar(token* tok, char* input) {
 	char c = input[tok->startIndex];
@@ -390,7 +719,7 @@ char* getOperatorString(token* tok){
 			return "structure member";
 			break;
 		case structure_pointer:
-			return "structure_pointer";
+			return "structure pointer";
 			break;
 		case sizeOf:
 			return "sizeof";
@@ -531,6 +860,9 @@ char* getTypeString(token* tok){
 		case op:
 			return getOperatorString(tok);
 			break;
+		case kw:
+			return getKeywordString(tok);
+			break;
 		default: "";
 	}
 }
@@ -599,6 +931,7 @@ void printTokens(char* input){
 //Main function that prints tokens for each command line argument provided
 int main(int argc, char* argv[]){
 	int i;
+	//printTokens("char");
 	for(i = 1; i < argc; ++i){
 		printTokens(argv[i]);
 	}
