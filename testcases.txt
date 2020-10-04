@@ -78,6 +78,10 @@ output:
 input: ""
 output:
 
+input: "sizeof123"
+output: 
+word: "sizeof123"
+
 input: "123.5E+12abc123 0x5 0x 0 1"
 output:
 floating point: "123.5E+12"
