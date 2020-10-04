@@ -368,7 +368,7 @@ void processOctalInt(token* tok, char* input){
 		processFloat(tok, input);
 	}
 }
-//checks if the word being processes is a keyword and processes the keyword if applicable
+//checks if the word being processed is a keyword and processes the keyword if applicable
 int processKeyword(token* tok, char* input){
 	char* c = input + tok->startIndex;
 	if(c[0] == 'a' && c[1] == 'u' && c[2] == 't' && c[3] == 'o' && !isalnum(c[4])){
